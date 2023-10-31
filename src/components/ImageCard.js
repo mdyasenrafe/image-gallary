@@ -3,7 +3,13 @@ import useConfigContext from "../context/useConfig";
 import { BiCheckbox, BiSolidCheckboxChecked } from "react-icons/bi";
 
 export default function ImageCard({ image, index }) {
-  const { setSelectedImage, selectedImage } = useConfigContext();
+  const {
+    setSelectedImage,
+    selectedImage,
+    handleDragStart,
+    handleDragOver,
+    handleDrop,
+  } = useConfigContext();
 
   // Local state to manage hover and selection status
   const [isHovering, setHoveringStatus] = useState(false);
@@ -26,6 +32,9 @@ export default function ImageCard({ image, index }) {
 
   return (
     <div
+      onDragStart={(e) => handleDragStart(e, index)}
+      onDragOver={(e) => handleDragOver(e, index)}
+      onDrop={(e) => handleDrop(e, index)}
       draggable={true}
       className={`${
         index === 0 ? "row-span-2 col-span-2" : ""

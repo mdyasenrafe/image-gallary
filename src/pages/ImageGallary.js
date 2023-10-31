@@ -1,10 +1,10 @@
 import { Container } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import useConfigContext from "../context/useConfig";
 import ImageCard from "../components/ImageCard";
 
 export default function ImageGallary() {
-  const { images } = useConfigContext();
+  const { images, setImages } = useConfigContext();
 
   return (
     <Container className="App">
