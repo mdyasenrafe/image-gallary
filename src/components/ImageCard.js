@@ -53,7 +53,11 @@ export default function ImageCard({ image, index }) {
       onMouseLeave={() => setIsHovered(false)}
       onClick={toggleSelection}
     >
-      <img src={image.source} alt={image.description} className="rounded-md" />
+      <img
+        src={image.source}
+        alt={image.description}
+        className="rounded-md h-full w-full "
+      />
       {(isSelected || isHovered) && (
         <div
           className={`absolute w-full top-0 left-0 p-2 rounded-md h-full ${
