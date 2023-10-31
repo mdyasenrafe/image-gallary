@@ -1,16 +1,17 @@
 import { Container } from "@mui/material";
 import ImageCard from "../components/ImageCard";
-import useConfigContext from "../context/useConfig";
 import { BiSolidCheckboxChecked } from "react-icons/bi";
 import { BsCardImage } from "react-icons/bs";
 import { useRef } from "react";
+import useConfigContext from "../context/useConfig";
 
 export default function ImageGallery() {
   const fileInputRef = useRef(null);
-  // Retrieving the images and update function from the gallery context
+
   const { galleryImages, selectedImages, setGalleryImages, setSelectedImages } =
     useConfigContext();
 
+  // Function to handle deleting selected images
   const handleDeleteImages = () => {
     const updatedImages = galleryImages.filter(
       (image) => !selectedImages.includes(image)
@@ -19,6 +20,7 @@ export default function ImageGallery() {
     setSelectedImages([]);
   };
 
+  // Function to handle image file input change
   const handleChange = () => {
     const files = fileInputRef.current.files;
     console.log(files);
@@ -26,17 +28,20 @@ export default function ImageGallery() {
       const file = files[0];
       const reader = new FileReader();
       reader.onload = function (e) {
-        const image = {
+        // Create a new image object with an ID, source, and description
+        const newImage = {
           id: galleryImages.length + 1,
           source: e.target.result,
           description: file.name,
         };
-        setGalleryImages([...galleryImages, image]);
+        setGalleryImages([...galleryImages, newImage]);
       };
       reader.readAsDataURL(file);
     }
   };
-  const onButtonClick = () => {
+
+  // Function to open the file input dialog
+  const handleAddImageClick = () => {
     fileInputRef.current?.click();
   };
 
@@ -66,13 +71,13 @@ export default function ImageGallery() {
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-5 auto-rows-fr">
           {galleryImages.map((image, index) => (
+            // Render ImageCard components for each image in the galleryImages array
             <ImageCard key={index} image={image} index={index} />
           ))}
-          {/*  add image section heihgt needs to same as image card */}
-          <div className="border border-dashed border-gray-300 rounded-md py-[24px]">
+          <div className="border border-dashed border-gray-300 rounded-md">
             <div
               className="flex justify-center items-center h-full flex-col cursor-pointer"
-              onClick={onButtonClick}
+              onClick={handleAddImageClick}
             >
               <BsCardImage size={24} />
               <p className="text-sm mt-2">Add Images</p>
