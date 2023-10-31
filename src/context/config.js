@@ -5,10 +5,13 @@ export const ConfigContext = createContext();
 
 export default function ConfigContextProvider({ children }) {
   const [images, setImages] = useState(imageGalleryData);
+  const [selectedImage, setSelectedImage] = useState([]);
 
   const value = {
     images,
     setImages,
+    selectedImage,
+    setSelectedImage,
   };
 
   return (
