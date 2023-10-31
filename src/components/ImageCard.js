@@ -1,56 +1,56 @@
 import React, { useState } from "react";
-import useConfigContext from "../context/useConfig";
 import { BiCheckbox, BiSolidCheckboxChecked } from "react-icons/bi";
+import useConfigContext from "../context/useConfig";
 
 export default function ImageCard({ image, index }) {
   const {
-    setSelectedImage,
-    selectedImage,
-    handleDragStart,
+    setSelectedImages,
+    selectedImages,
+    handleStartDrag,
     handleDragOver,
     handleDrop,
   } = useConfigContext();
 
-  // Local state to manage hover and selection status
-  const [isHovering, setHoveringStatus] = useState(false);
-  const [isSelected, setSelectionStatus] = useState(false);
+  // State to manage hover and selection status of the image card
+  const [isHovered, setIsHovered] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
 
-  // Function to handle image selection
-  const selectImage = () => {
-    console.log("Image selected");
-    setSelectionStatus(true);
-    setSelectedImage([...selectedImage, image]);
+  // Function to handle the selection of an image
+  const handleSelectImage = () => {
+    setIsSelected(true);
+    setSelectedImages([...selectedImages, image]);
   };
 
-  // Function to handle image deselection
-  const deselectImage = () => {
-    setSelectionStatus(false);
-    setSelectedImage(
-      selectedImage.filter((selected) => selected.id !== image.id)
-    );
+  // Function to handle the deselection of an image
+  const handleDeselectImage = () => {
+    setIsSelected(false);
+    setSelectedImages(selectedImages.filter((img) => img.id !== image.id));
+  };
+
+  // Function to toggle the selection status of an image
+  const toggleSelection = () => {
+    isSelected ? handleDeselectImage() : handleSelectImage();
   };
 
   return (
     <div
-      onDragStart={(e) => handleDragStart(e, index)}
+      draggable
+      onDragStart={(e) => handleStartDrag(e, index)}
       onDragOver={(e) => handleDragOver(e, index)}
       onDrop={(e) => handleDrop(e, index)}
-      draggable={true}
-      className={`${
+      className={`border border-gray-300 rounded-md relative ${
         index === 0 ? "row-span-2 col-span-2" : ""
-      } border border-gray-300 rounded-md relative`}
-      onMouseEnter={() => setHoveringStatus(true)}
-      onMouseLeave={() => setHoveringStatus(false)}
-      onClick={() => {
-        isSelected ? deselectImage() : selectImage();
-      }}
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={toggleSelection}
     >
       <img src={image.source} alt={image.description} className="rounded-md" />
-      {(isSelected || isHovering) && (
+      {(isSelected || isHovered) && (
         <div
-          className={`${
+          className={`absolute w-full top-0 left-0 p-2 rounded-md h-full ${
             isSelected ? "bg-[#f8fff980]" : "bg-[#e5e7eb80]"
-          } absolute w-full top-0 left-0 p-2 rounded-md h-full`}
+          }`}
         >
           {isSelected ? (
             <BiSolidCheckboxChecked size={24} color="#3366FF" />

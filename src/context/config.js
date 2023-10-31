@@ -1,46 +1,49 @@
 import React, { createContext, useState } from "react";
 import { imageGalleryData } from "../data/imageGalleryData";
 
-export const ConfigContext = createContext();
+export const ImageGalleryContext = createContext();
 
 export default function ConfigContextProvider({ children }) {
-  const [draggingIndex, setDraggingIndex] = useState(null);
-  const [images, setImages] = useState(imageGalleryData);
-  const [selectedImage, setSelectedImage] = useState([]);
+  const [draggedImageIndex, setDraggedImageIndex] = useState(null);
+  const [galleryImages, setGalleryImages] = useState(imageGalleryData);
+  const [selectedImages, setSelectedImages] = useState([]);
 
-  const handleDragStart = (e, index) => {
-    setDraggingIndex(index);
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/html", e.target);
+  // Handle the drag start event
+  const handleStartDrag = (event, index) => {
+    setDraggedImageIndex(index);
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/html", event.target);
   };
 
-  const handleDragOver = (e, index) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+  // Handle the drag over event
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
   };
 
-  const handleDrop = (e, index) => {
-    e.preventDefault();
-
-    // Reorder the items
-    const items = Array.from(images);
-    const [draggedImage] = items.splice(draggingIndex, 1);
-    items.splice(index, 0, draggedImage);
-    setImages(items);
-    setDraggingIndex(null);
+  // Handle the drop event, updating the image order
+  const handleDrop = (event, index) => {
+    event.preventDefault();
+    const updatedImages = Array.from(galleryImages);
+    const [relocatedImage] = updatedImages.splice(draggedImageIndex, 1);
+    updatedImages.splice(index, 0, relocatedImage);
+    setGalleryImages(updatedImages);
+    setDraggedImageIndex(null);
   };
 
-  const value = {
-    images,
-    setImages,
-    selectedImage,
-    setSelectedImage,
-    handleDragStart,
+  const contextValue = {
+    galleryImages,
+    setGalleryImages,
+    selectedImages,
+    setSelectedImages,
+    handleStartDrag,
     handleDragOver,
     handleDrop,
   };
 
   return (
-    <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
+    <ImageGalleryContext.Provider value={contextValue}>
+      {children}
+    </ImageGalleryContext.Provider>
   );
 }
