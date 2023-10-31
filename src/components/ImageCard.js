@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiCheckbox, BiSolidCheckboxChecked } from "react-icons/bi";
 import useConfigContext from "../context/useConfig";
 
@@ -15,15 +15,23 @@ export default function ImageCard({ image, index }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
 
+  useEffect(() => {
+    // Check if the image is already selected
+    const isAlreadySelected = selectedImages.some((img) => img.id === image.id);
+    if (isAlreadySelected) {
+      setIsSelected(true);
+    } else {
+      setIsSelected(false);
+    }
+  }, [selectedImages, image]);
+
   // Function to handle the selection of an image
   const handleSelectImage = () => {
-    setIsSelected(true);
     setSelectedImages([...selectedImages, image]);
   };
 
   // Function to handle the deselection of an image
   const handleDeselectImage = () => {
-    setIsSelected(false);
     setSelectedImages(selectedImages.filter((img) => img.id !== image.id));
   };
 
