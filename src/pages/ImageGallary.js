@@ -69,7 +69,7 @@ export default function ImageGallery() {
           </h1>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-5 auto-rows-fr">
+        <div className="grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-5 auto-rows-fr">
           {galleryImages.map((image, index) => (
             // Render ImageCard components for each image in the galleryImages array
             <ImageCard key={index} image={image} index={index} />
